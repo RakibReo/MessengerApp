@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeMenu"
+        android:title="Home"
+        android:icon="@drawable/ic_home_24"
+
+        />
+    <item
+        android:id="@+id/userMenu"
+        android:title="User"
+        android:icon="@drawable/ic_user_24"
+
+        />
+    <item
+        android:id="@+id/profileMenu"
+        android:title="Profile"
+        android:icon="@drawable/ic_profile_24"
+
+        />
+
+    <item
+        android:id="@+id/logOutMenu"
+        android:title="Log Out"
+        android:icon="@drawable/ic_logout_24"
+
+        />
+
+
+
+
+
+
+
+</menu>
