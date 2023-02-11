@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import com.example.sayhi.R;
 import com.example.sayhi.databinding.ActivityMainBinding;
 import com.example.sayhi.ui.fragment.HomeFragment;
+import com.example.sayhi.ui.fragment.LogoutFragment;
 import com.example.sayhi.ui.fragment.ProfileFragment;
 import com.example.sayhi.ui.fragment.UserFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -27,28 +28,11 @@ public class MainActivity extends AppCompatActivity {
         binding=ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
     firebaseAuth = FirebaseAuth.getInstance();
-     //binding.logOutBtn.setOnClickListener(v->{
-           // firebaseAuth.signOut();
-           // startActivity(new Intent(getApplicationContext(),LoginActivity.class));
-             //finish();
-
-      //  });
 
 
         fragmentManager = getSupportFragmentManager();
 
-        fragmentManager.beginTransaction().add(R.id.fragment_container, new HomeFragment(), "").commit();
-
-
-
-        binding.logoutBTn.setOnClickListener(v -> {
-
-            firebaseAuth.signOut();
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            finish();
-
-        });
-
+       fragmentManager.beginTransaction().add(R.id.fragment_container, new HomeFragment(), "").commit();
 
 
 
@@ -70,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.profileMenu:
                         fragmentManager.beginTransaction().replace(R.id.fragment_container, new ProfileFragment(), "").commit();
                         break;
+
+                    case R.id.logOutMenu:
+                        fragmentManager.beginTransaction().replace(R.id.fragment_container, new LogoutFragment(), "").commit();
+                        break;
+
 
 
                 }
