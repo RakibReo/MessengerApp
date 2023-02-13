@@ -49,7 +49,7 @@ public class UserFragment extends Fragment {
         userList=new ArrayList<>();
         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
 
-        databaseReference= FirebaseDatabase.getInstance().getReference("user").child(firebaseUser.getUid());
+        databaseReference= FirebaseDatabase.getInstance().getReference("user");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
