@@ -2,11 +2,16 @@ package com.example.sayhi.ui.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import com.example.sayhi.R;
 import com.example.sayhi.databinding.ActivityMainBinding;
@@ -27,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding=ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
     firebaseAuth = FirebaseAuth.getInstance();
 
 
@@ -67,6 +77,50 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater=getMenuInflater();
+        menuInflater.inflate(R.menu.top_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+
+        switch (item.getItemId()) {
+            case R.id.homeMenuTop:
+                Toast.makeText(this, "TopClicked", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.profileMenuTop:
+                Toast.makeText(this, "TopClicked", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.userMenuTop:
+                Toast.makeText(this, "TopClicked", Toast.LENGTH_SHORT).show();
+                break;
+
+
+            case R.id.logOutMenuTop:
+
+                logout();
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        // Inflate the layout for this fragment
+        firebaseAuth.signOut();
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        finish();
+
 
     }
 }
