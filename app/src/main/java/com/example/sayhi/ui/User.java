@@ -8,12 +8,23 @@ public class User {
     String userPhone;
     String userCountry;
 
-    public User(String userName, String userId, String userEmail, String userPhone, String userCountry) {
+    String profileImage;
+
+    public User(String userName, String userId, String userEmail, String userPhone, String userCountry,String profileImage) {
         this.userName = userName;
         this.userId = userId;
         this.userEmail = userEmail;
         this.userPhone = userPhone;
         this.userCountry = userCountry;
+        this.profileImage = profileImage;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 
     public User() {

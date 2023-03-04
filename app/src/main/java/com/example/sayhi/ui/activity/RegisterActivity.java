@@ -118,15 +118,16 @@ public class RegisterActivity extends AppCompatActivity {
                     userMap.put("userId",userId);   //unique id and it help to avoid overlap account
                     userMap.put("userEmail",email);
                     userMap.put("userPhone",phone);
+                    userMap.put("profileImage", "img");
                     userMap.put("countryName",binding.countryName.getText().toString());
 
                     databaseReference.child(userId).setValue(userMap).addOnSuccessListener(unused -> {          //alt+enter
 
 
                         dialog.dismiss();;  //progressbar ekhane stop hbe jokhn successfully new page jabe
-                        startActivity(new Intent(RegisterActivity.this,MainActivity.class));
+                        startActivity(new Intent(RegisterActivity.this,ImageUploadActivity.class));
                         //register compleete then go to dashboard
-                        finish();  //jeno back na aste pare
+
 
 
                     }).addOnFailureListener(e ->             //alt+enter
