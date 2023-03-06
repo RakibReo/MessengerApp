@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.sayhi.R;
 
 import java.util.List;
@@ -36,6 +37,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
 
    holder.userName.setText(userList.get(position).getUserName());
         holder.userMail.setText(userList.get(position).getUserName());
+
+        Glide.with(context)
+                .load(userList.get(position)
+                        .getProfileImage())
+                .placeholder(R.drawable.avatar_placeholder)
+                .into(holder.userImage);
 
 
 //        String nameStr=userList.get(position).getName();

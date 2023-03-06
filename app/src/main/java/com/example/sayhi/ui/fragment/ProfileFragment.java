@@ -1,5 +1,6 @@
 package com.example.sayhi.ui.fragment;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.sayhi.R;
 import com.example.sayhi.databinding.FragmentProfileBinding;
 import com.example.sayhi.databinding.FragmentUserBinding;
@@ -52,12 +55,18 @@ public class ProfileFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 User user =snapshot.getValue(User.class);
+
                // Log.i("TAG ","onDataChange "+user.getUserName());//single profile
 
                 binding.myName.setText(user.getUserName());
                 binding.myEmail.setText(user.getUserEmail());
                 binding.myPhone.setText(user.getUserPhone());
                 binding.myCountry.setText(user.getUserCountry());
+                binding.myImage.setImageResource(R.drawable.avatar_placeholder);
+
+//                Glide.with(context)
+//                        .load(path)
+//                        .into(myImage);
 
 
 
