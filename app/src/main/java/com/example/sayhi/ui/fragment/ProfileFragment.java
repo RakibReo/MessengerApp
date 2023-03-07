@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -26,6 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -36,6 +39,8 @@ public class ProfileFragment extends Fragment {
     TextView textview;
     DatabaseReference databaseReference;
     FirebaseUser firebaseUser;
+
+    ImageView myImage;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -56,22 +61,42 @@ public class ProfileFragment extends Fragment {
 
                 User user =snapshot.getValue(User.class);
 
+
+                //get image from firebase current user
+                Glide.with(ProfileFragment.this)
+                        .load(user.getProfileImage())
+                        .placeholder(R.drawable.avatar_placeholder)
+                        .into(binding.myImage);
+
                // Log.i("TAG ","onDataChange "+user.getUserName());//single profile
 
                 binding.myName.setText(user.getUserName());
                 binding.myEmail.setText(user.getUserEmail());
                 binding.myPhone.setText(user.getUserPhone());
                 binding.myCountry.setText(user.getUserCountry());
-                binding.myImage.setImageResource(R.drawable.avatar_placeholder);
+               // binding.myImage.setImageURI(uri);
+               // binding.myImage.setImageResource(R.drawable.avatar_placeholder);
 
 //                Glide.with(context)
 //                        .load(path)
 //                        .into(myImage);
 
 
+//                Glide.with(ProfileFragment.this).load("upload")
+//                        .diskCacheStrategy(DiskCacheStrategy.ALL).into(myImage);
 
 
-                }
+
+//                Glide.with(ProfileFragment.this)
+//                        .load(storageReference)
+//                        .into(myImage);
+
+
+
+
+
+
+            }
 
 
 
@@ -83,6 +108,8 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+
+
         // Inflate the layout for this fragment
         return binding.getRoot();
     }

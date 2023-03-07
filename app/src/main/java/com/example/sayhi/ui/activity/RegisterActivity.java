@@ -1,6 +1,6 @@
 package com.example.sayhi.ui.activity;
 
-import static com.example.sayhi.Utils.ShowAlert;
+import static com.example.sayhi.ui.ext.Utils.ShowAlert;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

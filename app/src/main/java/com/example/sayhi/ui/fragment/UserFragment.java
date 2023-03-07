@@ -1,5 +1,6 @@
 package com.example.sayhi.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import com.example.sayhi.databinding.FragmentUserBinding;
 import com.example.sayhi.ui.User;
 import com.example.sayhi.ui.UserAdapter;
+import com.example.sayhi.ui.activity.ChatActivity;
+import com.example.sayhi.ui.ext.UserListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserFragment extends Fragment {
+public class UserFragment extends Fragment implements UserListener {
 
     FragmentUserBinding binding;
     TextView textview;
@@ -69,7 +72,7 @@ public class UserFragment extends Fragment {
 
 
                 }
-                UserAdapter adapter=new UserAdapter(getContext(),userList);
+                UserAdapter adapter=new UserAdapter(getContext(),userList,UserFragment.this);
                 binding.suracall.setAdapter(adapter);
 
               //  Log.i("TAG ","onDataChange "+userList.toString());
@@ -94,6 +97,15 @@ public class UserFragment extends Fragment {
         //return view;
 
 
+
+    }
+
+    @Override
+    public void ItemClick(User user) {
+
+        Intent intent = new Intent(getActivity(), ChatActivity.class);
+        intent.putExtra("user_id", user.getUserId());
+        startActivity(intent);
 
     }
 }

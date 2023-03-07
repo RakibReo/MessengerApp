@@ -1,4 +1,4 @@
-package com.example.sayhi;
+package com.example.sayhi.ui.ext;
 
 import android.app.AlertDialog;
 import android.content.Context;

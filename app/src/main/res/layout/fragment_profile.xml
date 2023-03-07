@@ -8,15 +8,14 @@
     tools:context=".ui.fragment.ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
- <ImageView
-     android:id="@+id/myImage"
-     android:layout_width="200dp"
+ <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://image.android.com/apk/res-auto"
+    android:id="@+id/myImage"
+     android:layout_width="match_parent"
      android:layout_height="200dp"
      android:src="@drawable/ic_image"
-     android:layout_margin="20dp"
-     app:layout_constraintEnd_toEndOf="parent"
      app:layout_constraintStart_toStartOf="parent"
      app:layout_constraintTop_toTopOf="parent"
+     app:layout_constraintEnd_toEndOf="parent"
      />
 
 

@@ -1,6 +1,6 @@
 package com.example.sayhi.ui.activity;
 
-import static com.example.sayhi.Utils.ShowAlert;
+import static com.example.sayhi.ui.ext.Utils.ShowAlert;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,10 +66,9 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                          User user= snapshot.getValue(User.class);
+
                          if (Objects.requireNonNull(user).getProfileImage().equals("img")){
-
                              startActivity(new Intent(getApplicationContext(),ImageUploadActivity.class));
-
                              finish();
 
                          }else{

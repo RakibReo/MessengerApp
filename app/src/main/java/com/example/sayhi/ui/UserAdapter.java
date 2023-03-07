@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.sayhi.R;
+import com.example.sayhi.ui.ext.UserListener;
 
 import java.util.List;
 
@@ -19,9 +20,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
 
     private List <User> userList;
 
-    public UserAdapter(Context context, List<User> userList) {
+    UserListener userListener;
+
+    public UserAdapter(Context context, List<User> userList, UserListener userListener) {
         this.context = context;
         this.userList = userList;
+        this.userListener = userListener;
     }
 
     @NonNull
@@ -43,6 +47,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
                         .getProfileImage())
                 .placeholder(R.drawable.avatar_placeholder)
                 .into(holder.userImage);
+
+
+
+        holder.chat_icon.setOnClickListener(v->{
+
+              userListener.ItemClick(userList.get(position));
+
+
+
+
+        });
 
 
 //        String nameStr=userList.get(position).getName();
