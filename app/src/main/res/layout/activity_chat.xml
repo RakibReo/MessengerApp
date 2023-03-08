@@ -39,8 +39,8 @@
                 android:text="user Name"
                 android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
                 android:textColor="@color/white"
-                app:layout_constraintStart_toEndOf="@id/image"
-                app:layout_constraintTop_toTopOf="@id/image" />
+                app:layout_constraintStart_toEndOf="@id/userImage"
+                app:layout_constraintTop_toTopOf="@id/userImage" />
 
 
             <TextView
@@ -51,7 +51,7 @@
                 android:text="user@gmail.com"
                 android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                 android:textColor="@color/white"
-                app:layout_constraintStart_toEndOf="@id/image"
+                app:layout_constraintStart_toEndOf="@id/userImage"
                 app:layout_constraintTop_toBottomOf="@id/userName" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
