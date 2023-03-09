@@ -64,7 +64,15 @@ public class UserFragment extends Fragment implements UserListener {
                 for(DataSnapshot ds: snapshot.getChildren()){  //multiple user
 
                     User user =ds.getValue(User.class);   //user er extra faka constructor declare korte hoi
+
+//                    if(user.getUserId().equals(firebaseUser.getUid())){
+//                        userList.add(user);
+//
+//                    }
                     userList.add(user);
+
+
+
 
                    // Log.i("TAG ","onDataChange "+user.getUserName());
 
