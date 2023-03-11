@@ -1,5 +1,7 @@
 package com.example.sayhi.ui.activity;
 
+import static com.example.sayhi.ui.ext.Utils.ShowAlert;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,6 +20,7 @@ import com.example.sayhi.ui.ChatAdapter;
 import com.example.sayhi.ui.User;
 import com.example.sayhi.ui.model.Chat;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,6 +43,7 @@ public class ChatActivity extends AppCompatActivity {
     ActivityChatBinding binding;
 
     String remote_user_id;
+    ChatAdapter chatAdapter;
 
     FirebaseUser firebaseUser;
 
@@ -58,17 +62,19 @@ public class ChatActivity extends AppCompatActivity {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
-        chatList=new ArrayList<>();
-
 
         intent=getIntent();//user receiver
+        remote_user_id=intent.getStringExtra("user_id");
+        chatList=new ArrayList<>();
 
-            LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+            LinearLayoutManager linearLayoutManager=new LinearLayoutManager(ChatActivity.this);
             linearLayoutManager.setStackFromEnd(true);
             binding.chatRcv.setLayoutManager(linearLayoutManager);
 
-        remote_user_id=intent.getStringExtra("user_id");
+
         databaseReference= FirebaseDatabase.getInstance().getReference("user");
+        databaseReference= FirebaseDatabase.getInstance().getReference("chat");
+
        getRemoteUser(remote_user_id);
        readChat();
 
@@ -98,6 +104,13 @@ public class ChatActivity extends AppCompatActivity {
 
 
               }
+          }).addOnFailureListener(new OnFailureListener() {
+              @Override
+              public void onFailure(@NonNull Exception e) {
+
+                  ShowAlert(ChatActivity.this, e.getMessage().toString());
+
+              }
           });
 
        });
@@ -111,25 +124,28 @@ databaseReference.child("chat").addValueEventListener(new ValueEventListener() {
     @Override
     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-        chatList.clear();  //don't reapet msg
+   chatList.clear();  //don't reapet msg
 
         for(DataSnapshot dataSnapshot: snapshot.getChildren()){
 
             Chat chat=dataSnapshot.getValue(Chat.class);
 
+            if (chat != null){
 
+                if(chat.getSenderId().equals(firebaseUser.getUid()) && chat.getReceiverId().equals(remote_user_id)
+                        || chat.getSenderId().equals(remote_user_id) && chat.getReceiverId().equals(firebaseUser.getUid())) {
 
-            if(chat.getSenderId().equals(firebaseUser.getUid()) && chat.getSenderId().equals(remote_user_id)
-               || chat.getSenderId().equals(remote_user_id) && chat.getReceiverId().equals(firebaseUser.getUid())){
+                    chatList.add(chat);
 
-                  chatList.add(chat);
-
+                }
 
             }
 
+
+
         }
 
-        ChatAdapter chatAdapter=new ChatAdapter(chatList,firebaseUser.getUid());
+        chatAdapter=new ChatAdapter(chatList,firebaseUser.getUid());
         binding.chatRcv.setAdapter(chatAdapter);
 
 
@@ -152,12 +168,16 @@ databaseReference.child("user").child(user_id).addValueEventListener(new ValueEv
 
           User remoteUser=snapshot.getValue(User.class);
 
+        if (remoteUser != null){
 
-                 Glide.with(getApplicationContext()).load(remoteUser.getProfileImage()).
-                placeholder(R.drawable.avatar_placeholder).into(binding.userImage);
+            Glide.with(ChatActivity.this).load(remoteUser.getProfileImage()).
+                    placeholder(R.drawable.avatar_placeholder).into(binding.userImage);
 
-        binding.userName.setText(remoteUser.getUserName());
-        binding.userEmail.setText(remoteUser.getUserEmail());
+            binding.userName.setText(remoteUser.getUserName());
+            binding.userEmail.setText(remoteUser.getUserEmail());
+
+        }
+
 
 
     }
