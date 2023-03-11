@@ -65,10 +65,7 @@ public class UserFragment extends Fragment implements UserListener {
 
                     User user =ds.getValue(User.class);   //user er extra faka constructor declare korte hoi
 
-//                    if(user.getUserId().equals(firebaseUser.getUid())){
-//                        userList.add(user);
-//
-//                    }
+
                     userList.add(user);
 
 

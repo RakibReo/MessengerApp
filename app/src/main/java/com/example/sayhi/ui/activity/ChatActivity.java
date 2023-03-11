@@ -47,7 +47,9 @@ public class ChatActivity extends AppCompatActivity {
 
     FirebaseUser firebaseUser;
 
-    List<Chat> chatList;
+    List <Chat> chatList;
+
+    Chat chat;
 
 
     @Override
@@ -56,24 +58,26 @@ public class ChatActivity extends AppCompatActivity {
         binding=ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-          firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+
 
         toolbar = findViewById(R.id.toolbar);   //toolbar
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
-
-        intent=getIntent();//user receiver
-        remote_user_id=intent.getStringExtra("user_id");
         chatList=new ArrayList<>();
+        firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+        intent=getIntent();//user receiver
 
-            LinearLayoutManager linearLayoutManager=new LinearLayoutManager(ChatActivity.this);
+
+
+            LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
             linearLayoutManager.setStackFromEnd(true);
             binding.chatRcv.setLayoutManager(linearLayoutManager);
 
+        remote_user_id=intent.getStringExtra("user_id");
 
-        databaseReference= FirebaseDatabase.getInstance().getReference("user");
-        databaseReference= FirebaseDatabase.getInstance().getReference("chat");
+        databaseReference= FirebaseDatabase.getInstance().getReference();
+
 
        getRemoteUser(remote_user_id);
        readChat();
@@ -88,10 +92,12 @@ public class ChatActivity extends AppCompatActivity {
            String message=binding.messageEdt.getText().toString().trim();
           String currentUserId=firebaseUser.getUid();
           String messageId=databaseReference.push().getKey();
-           Chat chat=new Chat(currentUserId,remote_user_id,message,messageId);
 
 
-          databaseReference.child("chat").child("messageId").setValue(chat).addOnCompleteListener(new OnCompleteListener<Void>() {
+           chat=new Chat(currentUserId,remote_user_id,message,messageId);
+
+
+          databaseReference.child("chat").child(messageId).setValue(chat).addOnCompleteListener(new OnCompleteListener<Void>() {
               @Override
               public void onComplete(@NonNull Task<Void> task) {
 
@@ -102,13 +108,6 @@ public class ChatActivity extends AppCompatActivity {
               }
 
 
-
-              }
-          }).addOnFailureListener(new OnFailureListener() {
-              @Override
-              public void onFailure(@NonNull Exception e) {
-
-                  ShowAlert(ChatActivity.this, e.getMessage().toString());
 
               }
           });
@@ -124,20 +123,20 @@ databaseReference.child("chat").addValueEventListener(new ValueEventListener() {
     @Override
     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-   chatList.clear();  //don't reapet msg
+        chatList.clear();  //don't reapet msg
 
         for(DataSnapshot dataSnapshot: snapshot.getChildren()){
 
-            Chat chat=dataSnapshot.getValue(Chat.class);
+             chat=dataSnapshot.getValue(Chat.class);
 
-            if (chat != null){
+          // if (chat != null){
 
                 if(chat.getSenderId().equals(firebaseUser.getUid()) && chat.getReceiverId().equals(remote_user_id)
                         || chat.getSenderId().equals(remote_user_id) && chat.getReceiverId().equals(firebaseUser.getUid())) {
 
                     chatList.add(chat);
 
-                }
+            //   }
 
             }
 
@@ -166,17 +165,16 @@ databaseReference.child("user").child(user_id).addValueEventListener(new ValueEv
     @Override
     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+
           User remoteUser=snapshot.getValue(User.class);
 
-        if (remoteUser != null){
 
-            Glide.with(ChatActivity.this).load(remoteUser.getProfileImage()).
-                    placeholder(R.drawable.avatar_placeholder).into(binding.userImage);
+            Glide.with(getApplicationContext()).load(remoteUser.getProfileImage())
+                            .placeholder(R.drawable.avatar_placeholder).into(binding.userImage);
 
             binding.userName.setText(remoteUser.getUserName());
             binding.userEmail.setText(remoteUser.getUserEmail());
 
-        }
 
 
 
