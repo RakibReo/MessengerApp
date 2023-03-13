@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -37,7 +38,7 @@ public class ChatActivity extends AppCompatActivity {
 
     Intent intent;
 
-    DatabaseReference databaseReference;
+    DatabaseReference databaseReference,msgdatabaseReference;
 
     Toolbar toolbar;
     ActivityChatBinding binding;
@@ -74,9 +75,15 @@ public class ChatActivity extends AppCompatActivity {
             linearLayoutManager.setStackFromEnd(true);
             binding.chatRcv.setLayoutManager(linearLayoutManager);
 
-        remote_user_id=intent.getStringExtra("user_id");
+            if(intent.hasExtra("user_id")){
 
-        databaseReference= FirebaseDatabase.getInstance().getReference();
+                remote_user_id=intent.getStringExtra("user_id");
+                Log.i("TAG",remote_user_id);
+            }
+
+
+        databaseReference= FirebaseDatabase.getInstance().getReference("user");
+        msgdatabaseReference= FirebaseDatabase.getInstance().getReference("chat");
 
 
        getRemoteUser(remote_user_id);
@@ -97,7 +104,7 @@ public class ChatActivity extends AppCompatActivity {
            chat=new Chat(currentUserId,remote_user_id,message,messageId);
 
 
-          databaseReference.child("chat").child(messageId).setValue(chat).addOnCompleteListener(new OnCompleteListener<Void>() {
+          databaseReference.child(messageId).setValue(chat).addOnCompleteListener(new OnCompleteListener<Void>() {
               @Override
               public void onComplete(@NonNull Task<Void> task) {
 
@@ -119,7 +126,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void readChat() {
-databaseReference.child("chat").addValueEventListener(new ValueEventListener() {
+msgdatabaseReference.addValueEventListener(new ValueEventListener() {
     @Override
     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -129,14 +136,14 @@ databaseReference.child("chat").addValueEventListener(new ValueEventListener() {
 
              chat=dataSnapshot.getValue(Chat.class);
 
-          // if (chat != null){
+          if (chat != null){
 
                 if(chat.getSenderId().equals(firebaseUser.getUid()) && chat.getReceiverId().equals(remote_user_id)
                         || chat.getSenderId().equals(remote_user_id) && chat.getReceiverId().equals(firebaseUser.getUid())) {
 
                     chatList.add(chat);
 
-            //   }
+              }
 
             }
 
@@ -161,16 +168,21 @@ databaseReference.child("chat").addValueEventListener(new ValueEventListener() {
 
     private void getRemoteUser(String user_id) {
 
-databaseReference.child("user").child(user_id).addValueEventListener(new ValueEventListener() {
+databaseReference.child(user_id).addValueEventListener(new ValueEventListener() {
     @Override
     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
 
           User remoteUser=snapshot.getValue(User.class);
 
+        // if(remoteUser.getProfileImage()!=null || !remoteUser.getProfileImage().isEmpty()){
 
-            Glide.with(getApplicationContext()).load(remoteUser.getProfileImage())
-                            .placeholder(R.drawable.avatar_placeholder).into(binding.userImage);
+    Glide.with(getApplicationContext()).load(remoteUser.getProfileImage())
+            .placeholder(R.drawable.avatar_placeholder).into(binding.userImage);
+
+//}
+
+
 
             binding.userName.setText(remoteUser.getUserName());
             binding.userEmail.setText(remoteUser.getUserEmail());

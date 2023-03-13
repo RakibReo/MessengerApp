@@ -66,12 +66,13 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                          User user= snapshot.getValue(User.class);
+                         if(user!=null){
 
-                         if (Objects.requireNonNull(user).getProfileImage().equals("img")){
                              startActivity(new Intent(getApplicationContext(),ImageUploadActivity.class));
                              finish();
 
-                         }else{
+
+                         } else{
 
                              startActivity(new Intent(getApplicationContext(),MainActivity.class));
                              finish();

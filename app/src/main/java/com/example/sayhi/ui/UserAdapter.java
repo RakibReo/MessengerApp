@@ -1,6 +1,7 @@
 package com.example.sayhi.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.sayhi.R;
+import com.example.sayhi.ui.activity.ChatActivity;
 import com.example.sayhi.ui.ext.UserListener;
 
 import java.util.List;
@@ -52,9 +54,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
 
         holder.chat_icon.setOnClickListener(v->{
 
-              userListener.ItemClick(userList.get(position));
+//              userListener.ItemClick(userList.get(position));
 
-
+              Intent intent=new Intent(context, ChatActivity.class);
+              intent.putExtra("user_id",userList.get(position).getUserId());
+              context.startActivity(intent);
 
 
         });
