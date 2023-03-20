@@ -20,7 +20,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
 
     private Context context;
 
-    private List <User> userList;
+     List <User> userList;
 
     UserListener userListener;
 
@@ -54,33 +54,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
 
         holder.chat_icon.setOnClickListener(v->{
 
-//              userListener.ItemClick(userList.get(position));
-
-              Intent intent=new Intent(context, ChatActivity.class);
-              intent.putExtra("user_id",userList.get(position).getUserId());
-              context.startActivity(intent);
+         userListener.ItemClick(userList.get(position));
 
 
         });
 
-
-//        String nameStr=userList.get(position).getName();
-//
-//        String phnNmbr=userList.get(position).getMobile();
-//
-//        String age=userList.get(position).getAge();
-//
-//        Integer id=userList.get(position).getId();   //
-//
-//
-//
-//        holder.userName.setText(nameStr);
-//
-//        holder.userPhone.setText(phnNmbr);
-//
-//        holder.userAge.setText(age);
-//
-//        holder.userID.setText(id.toString());
 
 
 

@@ -1,5 +1,7 @@
 package com.example.sayhi.ui.fragment;
 
+import static com.example.sayhi.ui.ext.Utils.ShowAlert;
+
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -53,8 +55,8 @@ public class ProfileFragment extends Fragment {
         binding=FragmentProfileBinding.inflate(inflater, container, false);
 
         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
-
-        databaseReference= FirebaseDatabase.getInstance().getReference("user").child(firebaseUser.getUid());
+        String currentUserId= firebaseUser.getUid();
+        databaseReference= FirebaseDatabase.getInstance().getReference("user").child(currentUserId);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -74,26 +76,6 @@ public class ProfileFragment extends Fragment {
                 binding.myEmail.setText(user.getUserEmail());
                 binding.myPhone.setText(user.getUserPhone());
                 binding.myCountry.setText(user.getUserCountry());
-               // binding.myImage.setImageURI(uri);
-               // binding.myImage.setImageResource(R.drawable.avatar_placeholder);
-
-//                Glide.with(context)
-//                        .load(path)
-//                        .into(myImage);
-
-
-//                Glide.with(ProfileFragment.this).load("upload")
-//                        .diskCacheStrategy(DiskCacheStrategy.ALL).into(myImage);
-
-
-
-//                Glide.with(ProfileFragment.this)
-//                        .load(storageReference)
-//                        .into(myImage);
-
-
-
-
 
 
             }
@@ -103,7 +85,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
-
+                ShowAlert(getContext(),error.getMessage().toString());
 
 
             }

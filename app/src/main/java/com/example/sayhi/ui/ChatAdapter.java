@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sayhi.R;
-import com.example.sayhi.ui.model.Chat;
+import com.example.sayhi.ui.activity.Chat;
 
 import java.util.List;
 

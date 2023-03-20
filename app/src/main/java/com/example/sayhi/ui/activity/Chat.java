@@ -1,4 +1,4 @@
-package com.example.sayhi.ui.model;
+package com.example.sayhi.ui.activity;
 
 public class Chat {
 

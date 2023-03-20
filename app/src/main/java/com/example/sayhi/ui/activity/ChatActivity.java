@@ -9,9 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Log;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -19,9 +16,7 @@ import com.example.sayhi.R;
 import com.example.sayhi.databinding.ActivityChatBinding;
 import com.example.sayhi.ui.ChatAdapter;
 import com.example.sayhi.ui.User;
-import com.example.sayhi.ui.model.Chat;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,19 +33,18 @@ public class ChatActivity extends AppCompatActivity {
 
     Intent intent;
 
-    DatabaseReference databaseReference,msgdatabaseReference;
+    DatabaseReference databaseReference;
 
     Toolbar toolbar;
     ActivityChatBinding binding;
 
     String remote_user_id;
-    ChatAdapter chatAdapter;
+
 
     FirebaseUser firebaseUser;
 
     List <Chat> chatList;
 
-    Chat chat;
 
 
     @Override
@@ -66,33 +60,22 @@ public class ChatActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         chatList=new ArrayList<>();
-        firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        linearLayoutManager.setStackFromEnd(true);
+        binding.chatRcv.setLayoutManager(linearLayoutManager);
+
+
+
+
         intent=getIntent();//user receiver
 
+        remote_user_id=intent.getStringExtra("user_Id");
+        databaseReference= FirebaseDatabase.getInstance().getReference();
+        firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
 
-
-            LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
-            linearLayoutManager.setStackFromEnd(true);
-            binding.chatRcv.setLayoutManager(linearLayoutManager);
-
-            if(intent.hasExtra("user_id")){
-
-                remote_user_id=intent.getStringExtra("user_id");
-                Log.i("TAG",remote_user_id);
-            }
-
-
-        databaseReference= FirebaseDatabase.getInstance().getReference("user");
-        msgdatabaseReference= FirebaseDatabase.getInstance().getReference("chat");
-
-
+        //==============================================
        getRemoteUser(remote_user_id);
        readChat();
-
-
-
-
-
 
        binding.sendBtn.setOnClickListener(v->{
 
@@ -100,11 +83,9 @@ public class ChatActivity extends AppCompatActivity {
           String currentUserId=firebaseUser.getUid();
           String messageId=databaseReference.push().getKey();
 
+          Chat chat=new Chat(currentUserId,remote_user_id,message,messageId);
 
-           chat=new Chat(currentUserId,remote_user_id,message,messageId);
-
-
-          databaseReference.child(messageId).setValue(chat).addOnCompleteListener(new OnCompleteListener<Void>() {
+          databaseReference.child("chat").child(messageId).setValue(chat).addOnCompleteListener(new OnCompleteListener<Void>() {
               @Override
               public void onComplete(@NonNull Task<Void> task) {
 
@@ -126,7 +107,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void readChat() {
-msgdatabaseReference.addValueEventListener(new ValueEventListener() {
+databaseReference.child("chat").addValueEventListener(new ValueEventListener() {
     @Override
     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -134,24 +115,24 @@ msgdatabaseReference.addValueEventListener(new ValueEventListener() {
 
         for(DataSnapshot dataSnapshot: snapshot.getChildren()){
 
-             chat=dataSnapshot.getValue(Chat.class);
+            Chat chat=dataSnapshot.getValue(Chat.class);
 
-          if (chat != null){
+          if (snapshot.getChildren()!= null){
 
                 if(chat.getSenderId().equals(firebaseUser.getUid()) && chat.getReceiverId().equals(remote_user_id)
                         || chat.getSenderId().equals(remote_user_id) && chat.getReceiverId().equals(firebaseUser.getUid())) {
 
-                    chatList.add(chat);
+
 
               }
-
+              chatList.add(chat);
             }
 
 
 
         }
 
-        chatAdapter=new ChatAdapter(chatList,firebaseUser.getUid());
+       ChatAdapter chatAdapter=new ChatAdapter(chatList,firebaseUser.getUid());
         binding.chatRcv.setAdapter(chatAdapter);
 
 
@@ -159,30 +140,26 @@ msgdatabaseReference.addValueEventListener(new ValueEventListener() {
 
     @Override
     public void onCancelled(@NonNull DatabaseError error) {
-
+        ShowAlert(getApplicationContext(),error.getMessage().toString());
     }
 });
 
 
     }
 
+    //========================================================
+
     private void getRemoteUser(String user_id) {
 
-databaseReference.child(user_id).addValueEventListener(new ValueEventListener() {
+databaseReference.child("user").child(user_id).addValueEventListener(new ValueEventListener() {
     @Override
     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
 
           User remoteUser=snapshot.getValue(User.class);
 
-        // if(remoteUser.getProfileImage()!=null || !remoteUser.getProfileImage().isEmpty()){
-
     Glide.with(getApplicationContext()).load(remoteUser.getProfileImage())
             .placeholder(R.drawable.avatar_placeholder).into(binding.userImage);
-
-//}
-
-
 
             binding.userName.setText(remoteUser.getUserName());
             binding.userEmail.setText(remoteUser.getUserEmail());
