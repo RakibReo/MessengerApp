@@ -11,7 +11,7 @@ import com.example.sayhi.R;
 public class ChatViewHolder extends RecyclerView.ViewHolder {
 
 
-      TextView chatUiTv;
+      public TextView chatUiTv;
 
     public ChatViewHolder(@NonNull View itemView) {
         super(itemView);

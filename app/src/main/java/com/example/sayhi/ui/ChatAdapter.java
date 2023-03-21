@@ -15,12 +15,12 @@ import java.util.List;
 public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
 
 
-    List <Chat> chatList;
+    private List <Chat> chatList;
     private String currentUserID;
 
     private  final  static  int RIGHT=0;
     private  final  static  int LEFT=1;
-
+    View view;
     public ChatAdapter(List<Chat> chatList, String currentUserID) {
         this.chatList = chatList;
         this.currentUserID = currentUserID;
@@ -29,7 +29,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
     @NonNull
     @Override
     public ChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-          View view;
+
         if(viewType==RIGHT){
 
             view= LayoutInflater.from(parent.getContext()).inflate(R.layout.right_chat_ui,parent,false);

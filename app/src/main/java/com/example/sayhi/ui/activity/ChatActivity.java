@@ -69,7 +69,7 @@ public class ChatActivity extends AppCompatActivity {
 
         intent=getIntent();//user receiver
 
-        remote_user_id=intent.getStringExtra("user_Id");
+        remote_user_id=intent.getStringExtra("user_id");
         databaseReference= FirebaseDatabase.getInstance().getReference();
         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
 
@@ -83,7 +83,7 @@ public class ChatActivity extends AppCompatActivity {
           String currentUserId=firebaseUser.getUid();
           String messageId=databaseReference.push().getKey();
 
-          Chat chat=new Chat(currentUserId,remote_user_id,message,messageId);
+          Chat chat = new Chat(currentUserId,remote_user_id,message,messageId);
 
           databaseReference.child("chat").child(messageId).setValue(chat).addOnCompleteListener(new OnCompleteListener<Void>() {
               @Override
@@ -140,7 +140,7 @@ databaseReference.child("chat").addValueEventListener(new ValueEventListener() {
 
     @Override
     public void onCancelled(@NonNull DatabaseError error) {
-        ShowAlert(getApplicationContext(),error.getMessage().toString());
+
     }
 });
 
@@ -163,8 +163,6 @@ databaseReference.child("user").child(user_id).addValueEventListener(new ValueEv
 
             binding.userName.setText(remoteUser.getUserName());
             binding.userEmail.setText(remoteUser.getUserEmail());
-
-
 
 
     }

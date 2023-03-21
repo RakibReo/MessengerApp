@@ -1,5 +1,7 @@
 package com.example.sayhi.ui.fragment;
 
+import static com.example.sayhi.ui.ext.Utils.ShowAlert;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -52,6 +54,8 @@ public class UserFragment extends Fragment implements UserListener {
         userList=new ArrayList<>();
         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
 
+        Log.i("TAG", "onCreateView: "+userList.size());
+
         databaseReference= FirebaseDatabase.getInstance().getReference("user");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -68,17 +72,17 @@ public class UserFragment extends Fragment implements UserListener {
 
                     userList.add(user);
 
-
+                    Log.i("TAG", "onDataChange: "+userList.size());
 
 
                    // Log.i("TAG ","onDataChange "+user.getUserName());
 
 
-
+                    UserAdapter adapter=new UserAdapter(requireActivity(),userList,UserFragment.this);
+                    binding.suracall.setAdapter(adapter);
 
                 }
-                UserAdapter adapter=new UserAdapter(getContext(),userList,UserFragment.this);
-                binding.suracall.setAdapter(adapter);
+
 
               //  Log.i("TAG ","onDataChange "+userList.toString());
 
@@ -88,7 +92,7 @@ public class UserFragment extends Fragment implements UserListener {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                ShowAlert(getContext(),error.getMessage());
             }
         });
 
